@@ -14,8 +14,15 @@ const eventLogger = (req, res, next) => {
   winstonFile.log('info', toFile);
   next();
 };
+const processErrorLogger = (message, errorType) => {
+  const time = new Date().toUTCString();
+  const errString = `${time} | ${errorType}: ${message}`;
 
-const errorLogger = (err, req, res, next) => {
+  winstonConsole.log('error', errString);
+  winstonFile.log('error', errString);
+  return winstonFile;
+};
+const errorLogger = (err, req, res) => {
   const { statusCode, message } = handleError(err, res);
 
   const level = statusCode >= 400 && statusCode < 500 ? 'warn' : 'error';
@@ -25,16 +32,6 @@ const errorLogger = (err, req, res, next) => {
   const errString = `${time} | Error ${statusCode}: ${message}`;
   winstonConsole.log(level, errString);
   winstonFile.log(level, `${errString} | Request: ${toFile}`);
-  next();
-};
-
-const processErrorLogger = (message, errorType) => {
-  const time = new Date().toUTCString();
-  const errString = `${time} | ${errorType}: ${message}`;
-
-  winstonConsole.log('error', errString);
-  winstonFile.log('error', errString);
-  return winstonFile;
 };
 
 module.exports = { eventLogger, errorLogger, processErrorLogger };

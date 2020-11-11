@@ -16,9 +16,13 @@ const getAll = async boardId => {
 };
 
 const get = async (boardId, taskId) => {
+  const board = await boardsRepo.get(boardId);
+  if (!board) {
+    throw new ErrorHandler(NOT_FOUND, TASK_NOT_FOUND);
+  }
+
   const task = await tasksRepo.get(taskId);
-  console.log('find task->', task);
-  if (!task || task.boardId !== boardId) {
+  if (!task) {
     throw new ErrorHandler(NOT_FOUND, TASK_NOT_FOUND);
   }
   return task;
@@ -37,6 +41,6 @@ const update = async (taskId, boardId, taskData) => {
   return updateTask;
 };
 
-const remove = async (boardId, taskId) => tasksRepo.remove(boardId, taskId);
+const remove = async (boardId, taskId) => tasksRepo.remove(taskId);
 
 module.exports = { getAll, get, create, update, remove };

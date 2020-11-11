@@ -6,10 +6,10 @@ const {
   getStatusText
 } = require('http-status-codes');
 
-const { Board, toResponse } = require('./board.model');
+const { toResponse } = require('./board.model');
 const boardsService = require('./board.service');
 const { ErrorHandler, catchErrors } = require('../../common/error');
-const { ERRORS, MESSAGES } = require('../../common/constants');
+const { MESSAGES } = require('../../common/constants');
 
 router
   .route('/')
@@ -21,12 +21,7 @@ router
   )
   .post(
     catchErrors(async (req, res) => {
-      const board = await boardsService.add(
-        new Board({
-          title: req.body.title,
-          columns: req.body.columns
-        })
-      );
+      const board = await boardsService.add(req.body);
       res.status(OK).send(toResponse(board));
     })
   );
@@ -37,7 +32,7 @@ router
     catchErrors(async (req, res) => {
       const board = await boardsService.get(req.params.boardId);
       if (!board) {
-        throw new ErrorHandler(NOT_FOUND, ERRORS.BOARD_NOT_FOUND);
+        throw new ErrorHandler(NOT_FOUND, getStatusText(NOT_FOUND));
       }
       res.status(OK).send(toResponse(board));
     })
@@ -58,7 +53,7 @@ router
     catchErrors(async (req, res) => {
       const board = await boardsService.remove(req.params.boardId);
       if (!board) {
-        throw new ErrorHandler(NOT_FOUND, ERRORS.BOARD_NOT_FOUND);
+        throw new ErrorHandler(NOT_FOUND, getStatusText(NOT_FOUND));
       }
       res.status(204).send(MESSAGES.DELETE_BOARD_SUCCESSFULL_MESSAGE);
     })

@@ -10,8 +10,8 @@ const create = async Data => {
   return task;
 };
 
-const get = async id => {
-  const task = await Task.find({ taskId: id });
+const get = async taskId => {
+  const task = await Task.findById({ _id: taskId });
   return task !== null ? task : undefined;
 };
 

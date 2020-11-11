@@ -19,8 +19,8 @@ const Task = new Schema(
 );
 
 const toResponse = task => {
-  const { id, title, order, description, userId, boardId, columnId } = task;
-  return { id, title, order, description, userId, boardId, columnId };
+  const { _id, title, order, description, userId, boardId, columnId } = task;
+  return { id: _id, title, order, description, userId, boardId, columnId };
 };
 
 module.exports = {

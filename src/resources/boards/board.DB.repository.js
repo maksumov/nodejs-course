@@ -1,4 +1,5 @@
 const { Board } = require('./board.model');
+const { Task } = require('../tasks/task.model');
 
 const getAll = async () => {
   return Board.find({}).exec();
@@ -19,8 +20,9 @@ const update = async (boardId, boardData) => {
 };
 
 const remove = async boardId => {
-  const isDeleted = (await Board.deleteOne({ _id: boardId })).ok;
-  return isDeleted;
+  await Task.deleteMany({ boardId });
+  const boardDeleted = await Board.findByIdAndDelete(boardId);
+  return boardDeleted;
 };
 
 module.exports = { getAll, add, get, update, remove };

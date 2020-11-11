@@ -13,6 +13,11 @@ const get = async id => {
   return user !== null ? user : undefined;
 };
 
+const getByLogin = async ({ login }) => {
+  const user = await User.findOne({ login });
+  return user;
+};
+
 const update = async (id, userData) => {
   const isUpdate = (await User.updateOne({ _id: id }, userData)).ok;
   return isUpdate === 1 ? userData : undefined;
@@ -23,4 +28,4 @@ const remove = async id => {
   return isDeleted;
 };
 
-module.exports = { getAll, get, create, update, remove };
+module.exports = { getAll, get, getByLogin, create, update, remove };

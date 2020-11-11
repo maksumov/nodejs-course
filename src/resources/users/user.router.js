@@ -6,7 +6,6 @@ const {
   getStatusText
 } = require('http-status-codes');
 
-const { User } = require('./user.model');
 const usersService = require('./user.service');
 const { ErrorHandler, catchErrors } = require('../../common/error');
 const { ERRORS, MESSAGES } = require('../../common/constants');
@@ -22,13 +21,7 @@ router
   )
   .post(
     catchErrors(async (req, res) => {
-      const user = await usersService.create(
-        new User({
-          login: req.body.login,
-          name: req.body.name,
-          password: req.body.password
-        })
-      );
+      const user = await usersService.create(req.body);
       res.status(OK).send(toResponse(user));
     })
   );
@@ -55,8 +48,7 @@ router
   )
   .delete(
     catchErrors(async (req, res) => {
-      const { userId } = req.params;
-      const users = await usersService.remove(userId);
+      const users = await usersService.remove(req.params.userId);
       if (!users) {
         throw new ErrorHandler(NOT_FOUND, ERRORS.USER_NOT_FOUND);
       }

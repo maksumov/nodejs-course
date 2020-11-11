@@ -40,8 +40,7 @@ router
         req.params.boardId,
         req.params.taskId
       );
-      console.log(toResponse(task));
-      res.staic(OK).send(toResponse(task));
+      res.status(OK).send(toResponse(task));
     })
   )
   .put(
@@ -51,7 +50,7 @@ router
         req.params.boardId,
         req.body
       );
-      res.staic(OK).send(toResponse(task));
+      res.status(OK).send(toResponse(task));
     })
   )
   .delete(

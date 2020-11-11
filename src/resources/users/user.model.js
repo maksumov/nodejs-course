@@ -16,8 +16,8 @@ const User = new Schema(
 );
 
 const toResponse = user => {
-  const { id, name, login, password } = user;
-  return { id, name, login, password };
+  const { id, name, login } = user;
+  return { id, name, login };
 };
 
 module.exports = {
